@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <body>
+
+        <ui:composition template="./Template.xhtml">
+
+            <ui:define name="content">
+                <h:form>
+                    <hr></hr>
+                    <h4>Total de gastos nas Obras auditadas R$ #{mbObra.gastosTotais}</h4>
+                    <hr></hr>
+                    <!--Grafico 1-->
+                    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+                    <script type="text/javascript">
+                        google.charts.load('current', {'packages': ['corechart']});
+                        google.charts.setOnLoadCallback(drawChart);
+
+                            function drawChart() { 
+                                var data = google.visualization.arrayToDataTable([
+                                ['Status', 'Quantidade'],
+                                ['Em aberto', #{mbObra.aberto}],
+                                ['Em andamento', #{mbObra.andamento}],
+                                ['Finalizado', #{mbObra.finalizado}]
+                            ]);
+
+                                var options = {
+                            title: 'Total de Obras Finalizadas, Em andamento e Finalizadas'
+                            };
+                            var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+                        chart.draw(data, options);
+                        }
+                    </script>
+                    <!--Grafico 2-->
+                    
+                    <div id="piechart" style="width: 1315px; height: 250px;"></div>
+                    <hr></hr>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./Template.xhtml">
+
+            <ui:define name="content">
+                <h4>Cadastro de Obra pelo Funcionário</h4>
+                <p></p>
+                <h:form>
+                    <h:panelGrid title="Cadastro de Obra" columns="2">
+                        
+                        Tipo De Obra :
+                        <h:selectOneMenu value="#{mbObra.obraCad.tipoObra}" >
+                            <f:selectItem itemValue="Escolar" itemLabel="Escolar" />
+                            <f:selectItem itemValue="Hospitalar" itemLabel="Hospitalar" />                         
+                            <f:selectItem itemValue="Rodoviaria" itemLabel="Rodoviária" />
+                            <f:selectItem itemValue="Pontes" itemLabel="Pontes" />
+                            <f:selectItem itemValue="Saneamento" itemLabel="Saneamento" />                           
+                        </h:selectOneMenu>
+                        
+                        
+                        <p:outputLabel for="inline" value="Selecione o Prazo" />  
+                        <p:calendar id="inline" value="#{mbObra.obraCad.prazo}" mode="popup" /> 
+                        
+                        Prioridade::
+                        <h:selectOneMenu value="#{mbObra.obraCad.prioridade}" >
+                            <f:selectItem itemValue="Baixa" itemLabel="Baixa" />
+                            <f:selectItem itemValue="Media" itemLabel="Media" />                         
+                            <f:selectItem itemValue="Alta" itemLabel="Alta" />
+                            <f:selectItem itemValue="Urgente" itemLabel="Urgente" />                         
+                        </h:selectOneMenu>
+                        
+                        Descrição:: <h:inputTextarea value="#{mbObra.obraCad.descricao}" label="nome" required="true" />
+                        
+                        Profissional::<h:outputLabel value="#{mbLogin.usuarioLog.nome}"></h:outputLabel>
+                        #{mbObra.obraCad.idUsuario.setIdUsuario(mbLogin.usuarioLog.idUsuario)}
+                        #{mbObra.obraCad.setValor(0.0)}
+                        #{mbObra.obraCad.setStatus("Em aberto")}
+                        #{mbObra.obraCad.setIdobra(0)}
+                       
+                        <h:commandButton value="salvar" action="#{mbObra.saveObra()}"></h:commandButton>
+                        
+                    </h:panelGrid>
+                </h:form>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

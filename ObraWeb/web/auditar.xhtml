@@ -1,0 +1,90 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./Template.xhtml">
+
+            <ui:define name="content">
+               <h:form rendered="#{mbObra.page=='listar'}">
+                    #{mbObra.setU(mbLogin.usuarioLog)}
+                    <h3 style="color: #045491">Obras</h3>
+                    <h:panelGrid title="Lista de Obras">
+                        <p:dataTable value="#{mbObra.obras}" var="obra">
+                            <p:column headerText="Prioridade" filterBy="#{obra.prioridade}" filterMatchMode="contains">
+                                <h:outputText value="#{obra.prioridade}" />
+                            </p:column>
+                            <p:column headerText="Prazo Licitação" sortBy="#{obra.prazo}">
+                                <h:outputText value="#{obra.prazo}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Tipo de Obra" filterBy="#{obra.tipoObra}" filterMatchMode="contains">
+                                <h:outputText value="#{obra.tipoObra}" />
+                            </p:column>
+                            <p:column headerText="Dados">
+                                <h:outputText value="#{obra.descricao}" />
+                            </p:column>
+                            <p:column headerText="Status" filterBy="#{obra.status}" filterMatchMode="contains">
+                                <h:outputText value="#{obra.status}" />
+                            </p:column>
+                            <p:column headerText="Ações">
+                                <p:toolbar rendered="#{obra.status == 'Em andamento'}">
+                                    <f:facet name="left">
+                                        <p:menuButton value="Ações">
+                                            <p:menuitem value="Auditar" ajax="false"  action="#{mbObra.auditar(obra)}" style="background-color: #66ffcc"/>
+                                        </p:menuButton>
+                                    </f:facet>
+                                </p:toolbar>
+                            </p:column>
+                        </p:dataTable>
+                    </h:panelGrid>
+                </h:form>
+                
+                <h:form rendered="#{mbObra.page=='auditar'}">
+                    #{mbObra.setU(mbLogin.usuarioLog)}
+                    <h3 style="color: #045491">Auditar</h3>
+                    <h:panelGrid title="Auditoria de Obra">
+                        <p:dataTable value="#{mbObra.licitacao.resumolicitacaoList}" var="resLicitacao">
+                            <p:column headerText="Mês" sortBy="#{resLicitacao.mes}" filterMatchMode="contains">
+                                <h:outputText value="#{resLicitacao.mes}" />
+                            </p:column>
+                            <p:column headerText="Valor" filterBy="#{resLicitacao.valor}" filterMatchMode="contains">
+                                <h:outputText value="#{resLicitacao.valor}" />
+                            </p:column>
+                            <p:column headerText="Unidade" filterBy="#{resLicitacao.unidade}" filterMatchMode="contains">
+                                <h:outputText value="#{resLicitacao.unidade}" />
+                            </p:column>
+                            <p:column headerText="Unidade" filterBy="#{resLicitacao.descricao}" filterMatchMode="contains">
+                                <h:outputText value="#{resLicitacao.descricao}" />
+                            </p:column>
+                            <p:column headerText="Unidade" filterBy="#{resLicitacao.status}" filterMatchMode="contains">
+                                <h:outputText value="#{resLicitacao.status}" />
+                            </p:column>
+                            
+                            <p:column headerText="Ações">
+                                <p:toolbar>
+                                    <f:facet name="left">
+                                        <p:menuButton value="Ações">
+                                            <p:menuitem rendered="#{resLicitacao.status == 'Em andamento'}" value="Validar" ajax="false"  action="#{mbObra.validar(resLicitacao)}" style="background-color: crimson; color: #ffffff"/>
+                                            <p:menuitem rendered="#{resLicitacao.status == 'Finalizado'}" value="Finalizar Tudo" ajax="false"  action="#{mbObra.finalizarTudo(resLicitacao)}" style="background-color: crimson; color: #ffffff"/>
+                                        </p:menuButton>
+                                    </f:facet>
+                                </p:toolbar>
+                            </p:column>
+                        </p:dataTable>                        
+                    </h:panelGrid>
+                </h:form>
+                
+            </ui:define>
+                
+
+        </ui:composition>
+
+    </body>
+</html>

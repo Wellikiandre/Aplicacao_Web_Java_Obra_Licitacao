@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./Template.xhtml">
+
+            <ui:define name="content">
+                <h:form rendered="#{mbObra.page=='listar'}">
+                    #{mbObra.setU(mbLogin.usuarioLog)}
+                    <h3 style="color: #045491">Obras</h3>
+                    <h:panelGrid title="Lista de Obras">
+                        <p:dataTable value="#{mbObra.obras}" var="obra">
+                            <p:column headerText="Prioridade" filterBy="#{obra.prioridade}" filterMatchMode="contains">
+                                <h:outputText value="#{obra.prioridade}" />
+                            </p:column>
+                            <p:column headerText="Prazo Licitação" sortBy="#{obra.prazo}">
+                                <h:outputText value="#{obra.prazo}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Tipo de Obra" filterBy="#{obra.tipoObra}" filterMatchMode="contains">
+                                <h:outputText value="#{obra.tipoObra}" />
+                            </p:column>
+                            <p:column headerText="Dados">
+                                <h:outputText value="#{obra.descricao}" />
+                            </p:column>
+                            <p:column headerText="Status" filterBy="#{obra.status}" filterMatchMode="contains">
+                                <h:outputText value="#{obra.status}" />
+                            </p:column>
+                            <p:column headerText="Ações">
+                                <p:toolbar rendered="#{obra.status == 'Em aberto'}">
+                                    <f:facet name="left">
+                                        <p:menuButton value="Ações">
+                                            <p:menuitem value="Verificar Licitações" ajax="false"  action="#{mbObra.chamada2(obra)}" style="background-color: #66ffcc"/>
+                                        </p:menuButton>
+                                    </f:facet>
+                                </p:toolbar>
+                            </p:column>
+                        </p:dataTable>
+                    </h:panelGrid>
+                </h:form>
+
+                <h:form rendered="#{mbObra.page=='licitacao'}">
+                    <h3 style="color: #045491">Licitações</h3>
+                    <h:panelGrid title="Lista de Obras">
+                        <p:dataTable value="#{mbObra.chLicitacao.licitacoesList}" var="licitacao">
+                            <p:column headerText="Valor">
+                                <h:outputText value="#{mbObra.valor(licitacao.resumolicitacaoList)}" /> 
+                            </p:column>
+                            <p:column headerText="Tempo de Obra" sortBy="#{licitacao.quantidadeMeses}">
+                                <h:outputText value="#{licitacao.quantidadeMeses}" /> 
+                            </p:column>
+                            <p:column headerText="Descrição">
+                                <h:outputText value="#{licitacao.descricao}" /> 
+                            </p:column>
+                            <p:column>
+                                <p:commandButton value="Validar" ajax="false"  action="#{mbObra.chamada3(licitacao)}" style="background-color: #66ffcc"></p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+                    </h:panelGrid>
+
+                </h:form>
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

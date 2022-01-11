@@ -1,0 +1,116 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <body>
+
+        <ui:composition template="./Template.xhtml">
+
+            <ui:define name="content">
+
+                <h:form rendered="#{mbObra.page=='listar'}">
+                    #{mbObra.setU(mbLogin.usuarioLog)}
+                    <h3 style="color: #045491">Obras em Aberto</h3>
+                    <h:panelGrid title="Lista de Obras">
+                        <p:dataTable value="#{mbObra.obras}" var="obra">
+                            <p:column headerText="Prioridade" filterBy="#{obra.prioridade}" filterMatchMode="contains">
+                                <h:outputText value="#{obra.prioridade}" />
+                            </p:column>
+                            <p:column headerText="Prazo Licitação" sortBy="#{obra.prazo}">
+                                <h:outputText value="#{obra.prazo}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Tipo de Obra" filterBy="#{obra.tipoObra}" filterMatchMode="contains">
+                                <h:outputText value="#{obra.tipoObra}" />
+                            </p:column>
+                            <p:column headerText="Dados">
+                                <h:outputText value="#{obra.descricao}" />
+                            </p:column>
+                            <p:column headerText="Status" filterBy="#{obra.status}" filterMatchMode="contains">
+                                <h:outputText value="#{obra.status}" />
+                            </p:column>
+                            <p:column headerText="Ações">
+                                <p:toolbar rendered="#{obra.status == 'Em aberto'}">
+                                    <f:facet name="left">
+                                        <p:menuButton value="Ações">
+                                            <p:menuitem value="Abrir Licitação" ajax="false"  action="#{mbObra.chamada(obra)}" style="background-color: #66ffcc"/>
+                                            <p:menuitem value="Acompanhar Licitação" ajax="false" style="background-color: #ece3a5"/>
+                                        </p:menuButton>
+                                    </f:facet>
+                                </p:toolbar>
+                            </p:column>
+                        </p:dataTable>
+                    </h:panelGrid>
+                </h:form>
+                <h:form title="Parte 1 Licitação" rendered="#{mbObra.page == 'adicionar1'}">
+                    <h3 style="color: #045491"> Obra:: #{mbObra.chLicitacao.tipoObra}</h3>
+                    <h3 style="color: #045491"> Ação:: #{mbObra.chLicitacao.descricao}.</h3>
+                    <p:progressBar value="25" labelTemplate="{value}%" displayOnly="true"/>
+                    <hr></hr>
+                    #{mbObra.licitacao.setIdUsuario(mbLogin.usuarioLog)}
+                    #{mbObra.licitacao.setIdObra(mbObra.chLicitacao)}
+
+                    <h4>Cadastro Inicial: Parte 1</h4>
+                    <h:panelGrid columns="2">
+
+                        Previsão de Controle meses de Obra:
+                        <h:selectOneMenu value="#{mbObra.licitacao.quantidadeMeses}" >
+                            <f:selectItem itemValue="1" itemLabel="1 Mês" />
+                            <f:selectItem itemValue="2" itemLabel="2 Meses" />
+                            <f:selectItem itemValue="3" itemLabel="3 Meses" />
+                            <f:selectItem itemValue="4" itemLabel="4 Meses" />
+                            <f:selectItem itemValue="5" itemLabel="5 Meses" />
+                            <f:selectItem itemValue="6" itemLabel="6 Meses" />
+                            <f:selectItem itemValue="7" itemLabel="7 Meses" />
+                            <f:selectItem itemValue="8" itemLabel="8 Meses" />
+                            <f:selectItem itemValue="9" itemLabel="9 Meses" />
+                            <f:selectItem itemValue="10" itemLabel="10 Meses" />
+                            <f:selectItem itemValue="11" itemLabel="11 Meses" />
+                            <f:selectItem itemValue="12" itemLabel="12 Meses" />
+                            <f:selectItem itemValue="13" itemLabel="13 Meses" />
+                            <f:selectItem itemValue="14" itemLabel="14 Meses" />
+                            <f:selectItem itemValue="15" itemLabel="15 Meses" />
+                            <f:selectItem itemValue="16" itemLabel="16 Meses" />
+                            <f:selectItem itemValue="17" itemLabel="17 Meses" />
+                            <f:selectItem itemValue="18" itemLabel="18 Meses" />
+                            <f:selectItem itemValue="19" itemLabel="19 Meses" />
+                            <f:selectItem itemValue="20" itemLabel="20 Meses" />
+                            <f:selectItem itemValue="21" itemLabel="21 Meses" />
+                            <f:selectItem itemValue="22" itemLabel="22 Meses" />
+                            <f:selectItem itemValue="23" itemLabel="23 Meses" />
+                            <f:selectItem itemValue="24" itemLabel="24 Meses" />
+                        </h:selectOneMenu>
+                        Observação:: <h:inputTextarea value="#{mbObra.licitacao.descricao}" label="nome" required="true"></h:inputTextarea>
+                        <h:commandButton value="Avançar" action="#{mbObra.avancar()}"/>
+
+                    </h:panelGrid>
+                </h:form>
+
+
+                <h:form title="Parte 2 Licitação" rendered="#{mbObra.page=='adicionar2'}">
+                    <h3 style="color: #045491"> Obra:: #{mbObra.chLicitacao.tipoObra}</h3>
+                    <h3 style="color: #045491"> Ação:: #{mbObra.chLicitacao.descricao}.</h3>
+                    <h4>Cadastro Mensal <h3>Mês : #{mbObra.imeses} </h3></h4>
+                    <p:progressBar value="50" labelTemplate="{value}%" displayOnly="true"/>
+
+                    <h:panelGrid columns="2">
+                        <hr></hr>
+
+                        Descrição da Atividade::<h:inputTextarea value="#{mbObra.listResumo.descricao}"></h:inputTextarea>
+                        Unidade::<h:inputText value="#{mbObra.listResumo.unidade}"></h:inputText>
+                        Valor::<h:inputText value="#{mbObra.listResumo.valor}"></h:inputText>
+                        <h:commandButton value="Avançar" action="#{mbObra.saveAvancar()}"></h:commandButton>
+
+                    </h:panelGrid>
+
+                </h:form>
+
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>
